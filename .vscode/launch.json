@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CheeseAnalyzer",
+            "request": "launch",
+            "mainClass": "com.csc.CheeseAnalyzer",
+            "projectName": "am-i-a-muenster-for-making-cheese-puns-qf40805"
+        },
+        {
+            "name": "g++ - Build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": true,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "preLaunchTask": "g++ build active file"
+        }
+    ]
+}
