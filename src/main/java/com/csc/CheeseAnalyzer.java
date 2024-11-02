@@ -13,6 +13,7 @@ public class CheeseAnalyzer {
     public static void main(String[] args) {
         String csvFile = "cheese_data.csv"; // Change this to the path of your CSV file
         String outputFile = "output.txt";
+        String cheeseWithoutHeadersFile = "cheese_without_headers.csv"; // New file for cheese data without headers
         
         try {
             BufferedReader br = new BufferedReader(new FileReader(csvFile));
@@ -26,8 +27,14 @@ public class CheeseAnalyzer {
             int totalCheeses = 0;
             Map<String, Integer> milkTypeCount = new HashMap<>();
             
+            // Create BufferedWriter for the new CSV file
+            BufferedWriter csvWriter = new BufferedWriter(new FileWriter(cheeseWithoutHeadersFile));
+            
             // Process each line of the CSV
             while ((line = br.readLine()) != null) {
+                csvWriter.write(line); // Write the current line to the new CSV file
+                csvWriter.newLine(); // Add a new line
+                
                 String[] columns = line.split(",");
 
                 // Assuming columns are in the following order: [Name, MilkTreatmentTypeEn, Organic, MoisturePercent, MilkTypeEn]
@@ -44,20 +51,16 @@ public class CheeseAnalyzer {
                 }
 
                 // Count organic cheeses with moisture percentage > 41.0%
-                if ("1".equals(organic) && moisturePercent > 41.0) { // Corrected line
-                  organicMoistureCount++;
-              }
-
-                // Count milk types
-                if (milkTypeCount.containsKey(milkType)) {
-                    milkTypeCount.put(milkType, milkTypeCount.get(milkType) + 1);
-                } else {
-                    milkTypeCount.put(milkType, 1);
+                if ("1".equals(organic) || "yes".equalsIgnoreCase(organic) && moisturePercent > 41.0) { // Updated line
+                    organicMoistureCount++;
                 }
 
+                // Count milk types
+                milkTypeCount.put(milkType, milkTypeCount.getOrDefault(milkType, 0) + 1);
                 totalCheeses++;
             }
             br.close();
+            csvWriter.close(); // Close the CSV writer
 
             // Determine the milk type with the most cheeses
             String mostCommonMilkType = null;
@@ -77,7 +80,7 @@ public class CheeseAnalyzer {
                 writer.write("Most common milk type in Canada: " + mostCommonMilkType + "\n");
             }
 
-            System.out.println("Calculations completed. Results written to output.txt");
+            System.out.println("Calculations completed. Results written to output.txt and cheese data without headers written to " + cheeseWithoutHeadersFile);
 
         } catch (IOException e) {
             e.printStackTrace();
